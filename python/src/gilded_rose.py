@@ -11,36 +11,58 @@ class Item:
 
 class GildedRose(object):
 
-    def __init__(self, items):
+    def __init__(self, items) -> None:
         self.items = items
 
-    def update_quality(self):
-        for item in self.items:
-            if item.name == "Sulfuras, Hand of Ragnaros":
-                continue
+    def increase_quality(self, item: Item, value: int) -> None:
+        item.quality += value
 
+    def decrease_quality(self, item: Item, value: int) -> None:
+        item.quality -= value
+
+    def update_sellin(self, item: Item) -> None:
+        if item.name != "Sulfuras, Hand of Ragnaros":
             item.sell_in -= 1
 
-            if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                if item.sell_in < 0:
+    def is_expired(self, item: Item) -> bool:
+        return item.sell_in < 0
+
+    def is_sulfuras(self, item: Item) -> bool:
+        return item.name == "Sulfuras, Hand of Ragnaros"
+
+    def is_backstage_passes(self, item: Item) -> bool:
+        return item.name == "Backstage passes to a TAFKAL80ETC concert"
+
+    def is_aged_brie(self, item: Item) -> bool:
+        return item.name == "Aged Brie"
+
+    def update_quality(self) -> None:
+        for item in self.items:
+            if self.is_sulfuras(item):
+                continue
+
+            self.update_sellin(item)
+
+            if self.is_backstage_passes(item):
+                if self.is_expired(item):
                     item.quality = 0
                 elif item.sell_in <= 5:
-                    item.quality += 3
+                    self.increase_quality(item, 3)
                 elif item.sell_in <= 10:
-                    item.quality += 2
+                    self.increase_quality(item, 2)
                 else:
-                    item.quality += 1
+                    self.increase_quality(item, 1)
 
-            elif item.name == "Aged Brie":
-                item.quality += 1                    
-                if item.sell_in < 0:
-                    item.quality += 1
+            elif self.is_aged_brie(item):
+                self.increase_quality(item, 1)   
+                if self.is_expired(item):
+                    self.increase_quality(item, 1)
                         
             else:                
-                item.quality -= 1
+                self.decrease_quality(item, 1)
 
-                if item.sell_in < 0:
-                    item.quality -= 1
+                if self.is_expired(item):
+                    self.decrease_quality(item, 1)
             
             item.quality = min(50, item.quality)
             item.quality = max(0, item.quality)
