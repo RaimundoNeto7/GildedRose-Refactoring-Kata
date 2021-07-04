@@ -36,6 +36,39 @@ class GildedRose(object):
     def is_aged_brie(self, item: Item) -> bool:
         return item.name == "Aged Brie"
 
+    def update_backstage_passes_quality(self, item: Item) -> None:
+        if self.is_expired(item):
+            item.quality = 0
+            return
+        
+        if item.sell_in <= 5:
+            self.increase_quality(item, 3)
+            return
+        
+        if item.sell_in <= 10:
+            self.increase_quality(item, 2)
+            return
+        
+        self.increase_quality(item, 1)
+
+        
+
+    def update_aged_brie_quality(self, item: Item) -> None:
+        self.increase_quality(item, 1)   
+        if self.is_expired(item):
+            self.increase_quality(item, 1)
+
+    def update_general_item_quality(self, item: Item) -> None:
+        self.decrease_quality(item, 1)
+        if self.is_expired(item):
+            self.decrease_quality(item, 1)
+
+    def set_maximum_item_quality(self, item: Item) -> None:
+        item.quality = min(50, item.quality)
+
+    def set_minimum_item_quality(self, item: Item) -> None:
+        item.quality = max(0, item.quality)
+
     def update_quality(self) -> None:
         for item in self.items:
             if self.is_sulfuras(item):
@@ -44,25 +77,13 @@ class GildedRose(object):
             self.update_sellin(item)
 
             if self.is_backstage_passes(item):
-                if self.is_expired(item):
-                    item.quality = 0
-                elif item.sell_in <= 5:
-                    self.increase_quality(item, 3)
-                elif item.sell_in <= 10:
-                    self.increase_quality(item, 2)
-                else:
-                    self.increase_quality(item, 1)
-
+                self.update_backstage_passes_quality(item)
+                
             elif self.is_aged_brie(item):
-                self.increase_quality(item, 1)   
-                if self.is_expired(item):
-                    self.increase_quality(item, 1)
+                self.update_aged_brie_quality(item)
                         
             else:                
-                self.decrease_quality(item, 1)
+                self.update_general_item_quality(item)
 
-                if self.is_expired(item):
-                    self.decrease_quality(item, 1)
-            
-            item.quality = min(50, item.quality)
-            item.quality = max(0, item.quality)
+            self.set_maximum_item_quality(item)
+            self.set_minimum_item_quality(item)
