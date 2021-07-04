@@ -73,3 +73,47 @@ def test_update_quality_sulfuras():
     gildedrose.update_quality()
     item = gildedrose.items[0]
     assert item.quality == initial_quality
+
+def test_update_quality_backstage_passes_11_days_or_more():
+    gildedrose = GildedRose([Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=13, quality=10)])
+    
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 11
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 12
+
+def test_update_quality_backstage_passes_10_days_left():
+    gildedrose = GildedRose([Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=10)])
+    
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 12
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 14
+
+def test_update_quality_backstage_passes_5_days_left():
+    gildedrose = GildedRose([Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=10)])
+    
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 13
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 16
+
+def test_update_quality_backstage_passes_0_days_left():
+    gildedrose = GildedRose([Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=1, quality=10)])
+    
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 13
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 0
