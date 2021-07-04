@@ -1,6 +1,28 @@
 from src.gilded_rose import GildedRose, Item
 import pytest
 
+def test_negative_quality():
+    gildedrose = GildedRose([Item(name="Other", sell_in=0, quality=0)])
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 0
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 0
+
+def test_update_quality_decrease():
+    gildedrose = GildedRose([Item(name="Other", sell_in=1, quality=10)])
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 9
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 7
+
 @pytest.mark.parametrize("input, expected", [([], 0), ([Item(name="FAKE", sell_in=0, quality=1)], 1)])
 def test_create_giled_rose(input, expected):
     gildedrose = GildedRose(input)
