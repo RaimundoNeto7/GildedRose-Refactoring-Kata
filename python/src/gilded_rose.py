@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Item:
     def __init__(self, name, sell_in, quality):
         self.name = name
@@ -9,8 +10,8 @@ class Item:
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
-class GildedRose(object):
 
+class GildedRose(object):
     def __init__(self, items) -> None:
         self.items = items
 
@@ -40,21 +41,19 @@ class GildedRose(object):
         if self.is_expired(item):
             item.quality = 0
             return
-        
+
         if item.sell_in <= 5:
             self.increase_quality(item, 3)
             return
-        
+
         if item.sell_in <= 10:
             self.increase_quality(item, 2)
             return
-        
+
         self.increase_quality(item, 1)
 
-        
-
     def update_aged_brie_quality(self, item: Item) -> None:
-        self.increase_quality(item, 1)   
+        self.increase_quality(item, 1)
         if self.is_expired(item):
             self.increase_quality(item, 1)
 
@@ -78,11 +77,11 @@ class GildedRose(object):
 
             if self.is_backstage_passes(item):
                 self.update_backstage_passes_quality(item)
-                
+
             elif self.is_aged_brie(item):
                 self.update_aged_brie_quality(item)
-                        
-            else:                
+
+            else:
                 self.update_general_item_quality(item)
 
             self.set_maximum_item_quality(item)
