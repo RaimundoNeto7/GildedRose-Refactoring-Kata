@@ -1,4 +1,6 @@
-from src.gilded_rose import GildedRose, Item
+from src.gilded_rose import GildedRose
+from src.item import Item
+from src.item_types import ItemTypes
 import pytest
 
 
@@ -37,9 +39,9 @@ def test_create_giled_rose(input, expected):
 @pytest.mark.parametrize(
     "item_name, quality, expected_quality",
     [
-        ("Aged Brie", 50, 50),
-        ("Sulfuras, Hand of Ragnaros", 80, 80),
-        ("Backstage passes to a TAFKAL80ETC concert", 50, 0),
+        (ItemTypes.AGED_BRIE.value, 50, 50),
+        (ItemTypes.SULFURAS.value, 80, 80),
+        (ItemTypes.BACKSTAGE_PASSES.value, 50, 0),
     ],
 )
 def test_update_quality_maximum_value(item_name, quality, expected_quality):
@@ -53,7 +55,7 @@ def test_update_quality_maximum_value(item_name, quality, expected_quality):
 def test_update_quality_aged_brie():
     initial_quality = 10
     gildedrose = GildedRose(
-        [Item(name="Aged Brie", sell_in=2, quality=initial_quality)]
+        [Item(name=ItemTypes.AGED_BRIE.value, sell_in=2, quality=initial_quality)]
     )
     gildedrose.update_quality()
 
@@ -69,7 +71,7 @@ def test_update_quality_aged_brie():
 def test_update_quality_expired_aged_brie():
     initial_quality = 10
     gildedrose = GildedRose(
-        [Item(name="Aged Brie", sell_in=0, quality=initial_quality)]
+        [Item(name=ItemTypes.AGED_BRIE.value, sell_in=0, quality=initial_quality)]
     )
 
     gildedrose.update_quality()
@@ -84,7 +86,7 @@ def test_update_quality_expired_aged_brie():
 def test_update_quality_sulfuras():
     initial_quality = 10
     gildedrose = GildedRose(
-        [Item(name="Sulfuras, Hand of Ragnaros", sell_in=1, quality=initial_quality)]
+        [Item(name=ItemTypes.SULFURAS.value, sell_in=1, quality=initial_quality)]
     )
 
     gildedrose.update_quality()
@@ -98,7 +100,7 @@ def test_update_quality_sulfuras():
 
 def test_update_quality_backstage_passes_11_days_or_more():
     gildedrose = GildedRose(
-        [Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=13, quality=10)]
+        [Item(name=ItemTypes.BACKSTAGE_PASSES.value, sell_in=13, quality=10)]
     )
 
     gildedrose.update_quality()
@@ -112,7 +114,7 @@ def test_update_quality_backstage_passes_11_days_or_more():
 
 def test_update_quality_backstage_passes_10_days_left():
     gildedrose = GildedRose(
-        [Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=10)]
+        [Item(name=ItemTypes.BACKSTAGE_PASSES.value, sell_in=10, quality=10)]
     )
 
     gildedrose.update_quality()
@@ -126,7 +128,7 @@ def test_update_quality_backstage_passes_10_days_left():
 
 def test_update_quality_backstage_passes_5_days_left():
     gildedrose = GildedRose(
-        [Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=10)]
+        [Item(name=ItemTypes.BACKSTAGE_PASSES.value, sell_in=5, quality=10)]
     )
 
     gildedrose.update_quality()
@@ -140,7 +142,7 @@ def test_update_quality_backstage_passes_5_days_left():
 
 def test_update_quality_backstage_passes_0_days_left():
     gildedrose = GildedRose(
-        [Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=1, quality=10)]
+        [Item(name=ItemTypes.BACKSTAGE_PASSES.value, sell_in=1, quality=10)]
     )
 
     gildedrose.update_quality()
@@ -153,7 +155,9 @@ def test_update_quality_backstage_passes_0_days_left():
 
 
 def test_update_quality_magically_conjured():
-    gildedrose = GildedRose([Item(name="Magically Conjured", sell_in=5, quality=10)])
+    gildedrose = GildedRose(
+        [Item(name=ItemTypes.MAGICALLY_CONJURED.value, sell_in=5, quality=10)]
+    )
 
     gildedrose.update_quality()
     item = gildedrose.items[0]
@@ -163,8 +167,11 @@ def test_update_quality_magically_conjured():
     item = gildedrose.items[0]
     assert item.quality == 6
 
+
 def test_update_quality_expired_magically_conjured():
-    gildedrose = GildedRose([Item(name="Magically Conjured", sell_in=0, quality=10)])
+    gildedrose = GildedRose(
+        [Item(name=ItemTypes.MAGICALLY_CONJURED.value, sell_in=0, quality=10)]
+    )
 
     gildedrose.update_quality()
     item = gildedrose.items[0]

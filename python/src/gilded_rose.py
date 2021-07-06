@@ -1,11 +1,5 @@
-class Item:
-    def __init__(self, name, sell_in, quality):
-        self.name = name
-        self.sell_in = sell_in
-        self.quality = quality
-
-    def __repr__(self):
-        return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
+from src.item import Item
+from src.item_types import ItemTypes
 
 
 class GildedRose(object):
@@ -19,23 +13,23 @@ class GildedRose(object):
         item.quality -= value
 
     def update_sellin(self, item: Item) -> None:
-        if item.name != "Sulfuras, Hand of Ragnaros":
+        if item.name != ItemTypes.SULFURAS.value:
             item.sell_in -= 1
 
     def is_expired(self, item: Item) -> bool:
         return item.sell_in < 0
 
     def is_sulfuras(self, item: Item) -> bool:
-        return item.name == "Sulfuras, Hand of Ragnaros"
+        return item.name == ItemTypes.SULFURAS.value
 
     def is_backstage_passes(self, item: Item) -> bool:
-        return item.name == "Backstage passes to a TAFKAL80ETC concert"
+        return item.name == ItemTypes.BACKSTAGE_PASSES.value
 
     def is_aged_brie(self, item: Item) -> bool:
-        return item.name == "Aged Brie"
+        return item.name == ItemTypes.AGED_BRIE.value
 
     def is_magically_conjured(self, item: Item) -> bool:
-        return item.name == "Magically Conjured"
+        return item.name == ItemTypes.MAGICALLY_CONJURED.value
 
     def update_backstage_passes_quality(self, item: Item) -> None:
         if self.is_expired(item):
