@@ -150,3 +150,26 @@ def test_update_quality_backstage_passes_0_days_left():
     gildedrose.update_quality()
     item = gildedrose.items[0]
     assert item.quality == 0
+
+
+def test_update_quality_magically_conjured():
+    gildedrose = GildedRose([Item(name="Magically Conjured", sell_in=5, quality=10)])
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 8
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 6
+
+def test_update_quality_expired_magically_conjured():
+    gildedrose = GildedRose([Item(name="Magically Conjured", sell_in=0, quality=10)])
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 6
+
+    gildedrose.update_quality()
+    item = gildedrose.items[0]
+    assert item.quality == 2

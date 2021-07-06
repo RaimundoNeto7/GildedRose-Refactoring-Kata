@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class Item:
     def __init__(self, name, sell_in, quality):
         self.name = name
@@ -37,6 +34,9 @@ class GildedRose(object):
     def is_aged_brie(self, item: Item) -> bool:
         return item.name == "Aged Brie"
 
+    def is_magically_conjured(self, item: Item) -> bool:
+        return item.name == "Magically Conjured"
+
     def update_backstage_passes_quality(self, item: Item) -> None:
         if self.is_expired(item):
             item.quality = 0
@@ -56,6 +56,11 @@ class GildedRose(object):
         self.increase_quality(item, 1)
         if self.is_expired(item):
             self.increase_quality(item, 1)
+
+    def update_magically_conjured_quality(self, item: Item) -> None:
+        self.decrease_quality(item, 2)
+        if self.is_expired(item):
+            self.decrease_quality(item, 2)
 
     def update_general_item_quality(self, item: Item) -> None:
         self.decrease_quality(item, 1)
@@ -80,6 +85,9 @@ class GildedRose(object):
 
             elif self.is_aged_brie(item):
                 self.update_aged_brie_quality(item)
+
+            elif self.is_magically_conjured(item):
+                self.update_magically_conjured_quality(item)
 
             else:
                 self.update_general_item_quality(item)
